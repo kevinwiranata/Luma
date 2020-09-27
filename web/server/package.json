@@ -18,6 +18,7 @@
     "fabric-ca-client": "^2.2.2",
     "fabric-client": "^1.4.10",
     "fabric-network": "^2.2.2",
+    "jade": "^1.11.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   }

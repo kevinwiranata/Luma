@@ -3,7 +3,7 @@ const { Wallets, Gateway } = require("fabric-network");
 const path = require("path");
 const util = require("util");
 const fs = require("fs");
-const FabricCAServices = require('fabric-ca-client');
+const FabricCAServices = require("fabric-ca-client");
 
 let CAutil = require("./CAutil.js");
 
@@ -21,6 +21,7 @@ const ccpPath = path.join(process.cwd(), connection_file);
 const ccpJSON = fs.readFileSync(ccpPath, "utf8");
 const ccp = JSON.parse(ccpJSON);
 
+// creates a network object (contract, network, gateway) to invoke transactions
 exports.connectToNetwork = async function (userName, smartContract) {
   const gateway = new Gateway();
 
@@ -86,8 +87,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
     console.log(`isQuery: ${isQuery}, func: ${func}, args: ${args}`);
 
     if (isQuery === true) {
-      console.log("inside isQuery");
-
+      // query, transaction is not recorded on ledger
       if (args) {
         console.log("inside isQuery, args");
         console.log(args);
@@ -111,7 +111,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
         return response;
       }
     } else {
-      console.log("notQuery");
+      // notQuery, transaction is record on ledger
       if (args) {
         console.log("notQuery, args");
         console.log(args);
@@ -144,7 +144,7 @@ exports.invoke = async function (networkObj, isQuery, func, args) {
   } catch (error) {
     console.error(`Failed to submit transaction: ${error}`);
     let response = {};
-		response.error = error;
+    response.error = error;
     return response;
   }
 };
@@ -174,7 +174,11 @@ exports.registerPatient = async function (patientID, password, fullName) {
     });
 
     // Get the CA client object from the gateway for interacting with the CA.
-    const caClient = CAutil.buildCAClient(FabricCAServices, ccp, '169.51.204.160:31872')
+    const caClient = CAutil.buildCAClient(
+      FabricCAServices,
+      ccp,
+      "169.51.204.160:31872"
+    );
     const response = await CAutil.registerAndEnrollUser(
       caClient,
       wallet,
@@ -186,7 +190,7 @@ exports.registerPatient = async function (patientID, password, fullName) {
     return response;
   } catch (error) {
     let response = {};
-		response.error = error;
+    response.error = error;
     return response;
   }
 };
@@ -215,7 +219,11 @@ exports.registerDoctor = async function (doctorID, password, fullName) {
     });
 
     // Get the CA client object from the gateway for interacting with the CA.
-    const caClient = CAutil.buildCAClient(FabricCAServices, ccp, '169.51.204.160:31872')
+    const caClient = CAutil.buildCAClient(
+      FabricCAServices,
+      ccp,
+      "169.51.204.160:31872"
+    );
 
     return await CAutil.registerAndEnrollUser(
       caClient,
@@ -226,7 +234,7 @@ exports.registerDoctor = async function (doctorID, password, fullName) {
     );
   } catch (error) {
     let response = {};
-		response.error = error;
+    response.error = error;
     return response;
   }
 };

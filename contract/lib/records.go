@@ -11,7 +11,10 @@ import (
 
 const recordObyType = "record"
 
+// add more attributes, use couchDB indexing
+
 type singleRecord struct {
+	Tags        []string  // {general-check-up, dockter anak}
 	Date        time.Time `json:"date"`
 	Description string    `json:"description"`
 	Doctor      string    `json:"doctor"`
